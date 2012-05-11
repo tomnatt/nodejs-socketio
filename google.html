@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Google Visualization API Sample</title>
+  <script src="http://www.bath.ac.uk/common/js/jquery.js" type="text/javascript"></script>
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    google.load('visualization', '1', {packages: ['geomap']});
+    
+    var geomap;
+    
+    var options = {};
+        options['dataMode'] = 'markers';  
+        options['showLegend'] = false;
+        options['width'] = 945;
+        options['height'] = 590;
+
+    var theData = {};
+    theData['GB'] = ['United Kingdom',0];
+
+    function drawVisualization() {
+     
+       var data = new google.visualization.DataTable();
+    
+       data.addColumn('string', 'Country');
+       data.addColumn('number', 'Visits');
+       data.addColumn('string', 'HOVER', 'HoverText');
+      
+       data.addRows(1);
+       data.setValue(0, 0, 'GB');
+       data.setValue(0, 1, 0);
+       data.setValue(0, 2, 'United Kingdom');
+ 
+       geomap = new google.visualization.GeoMap(
+          document.getElementById('visualization'));
+       geomap.draw(data, options);
+    }
+    
+    google.setOnLoadCallback(drawVisualization);
+    
+    $(document).ready(function() {
+        $('#fish').click(function() {
+        
+          theData['US'] = ['America',200];
+          
+          var data = new google.visualization.DataTable();
+           
+          data.addColumn('string', 'Country');
+          data.addColumn('number', 'Visits');
+          data.addColumn('string', 'HOVER', 'HoverText');
+       
+           for (var code in theData) {
+               var index = data.addRow();
+               data.setValue(index, 0, code);
+               data.setValue(index, 1, theData[code][1]);
+               data.setValue(index, 2, theData[code][0])
+           }
+           
+           geomap.draw(data, options);
+        });
+    });
+  </script>
+</head>
+<body style="font-family: Arial;border: 0 none;">
+<div id="visualization" style="width: 1000px; height: 600px;"></div>
+<div style="clear: both;" />
+<input type="button" id="fish" value="Click me" />
+</body>
+</html>
